@@ -16,7 +16,7 @@
 | Front-End | Design Compiler, PrimeTime, Formality |
 | Back-End | IC Compiler II (Floorplan, PNS, Place, CTS, Route, Filler, Sign-off check), StarRC, IC Validator |
 | Simulation | VCS, Verdi, PSpice |
-| Script / Language | **TCL (DC 위반 수정 자동화 proc 직접 작성)**, Verilog, Python, C, C++ |
+| Script / Language | **TCL (tool별 run tcl 및 timing eco tcl 작성)**, Verilog, Python, C, C++ |
 | 기타 | Linux, FPGA, MCU (ATmega128), RTOS |
 
 <br>
