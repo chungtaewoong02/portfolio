@@ -64,10 +64,9 @@
 
 <br>
 
-## 결과
+## 동작 결과
 
-| 초음파 센서 거리별 전압 | 장애물 회피 동작 |
-|---|---|
-| ![voltage](images/ultrasonic_voltage.png) | ![avoid](images/obstacle_avoid.png) |
-
-<p align="center"><img src="images/rc_car.png" width="60%"><br>직접 만든 Android 앱으로 RC카 조종</p>
+| 1. 라인트레이서 | 4. 장애물 회피 | 7. BLE RC카 |
+|---|---|---|
+| ![line tracer](images/line_tracer.png) | ![avoid](images/obstacle_avoid.png) | ![rc car](images/rc_car.png) |
+| 포토 센서로 곡선 트랙 추종 | 초음파 센서 3개로 좌 · 우 장애물 감지 후 회피 | 직접 만든 Android 앱으로 조종 |
