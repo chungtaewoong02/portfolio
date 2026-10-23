@@ -1,8 +1,8 @@
-# CISC 합성: Retiming과 Formality
+# CISC 합성: Half-cycle 경로 Timing Closure
 
 [← 메인으로](../)
 
-8-bit CISC 마이크로프로세서를 3개 공정에서 합성하면서, **retiming이 레지스터를 삭제해 Formality가 실패한 문제**를 원인부터 추적해 해결한 프로젝트입니다.
+8-bit CISC 마이크로프로세서를 3개 공정에서 합성하면서, **반전 clock을 쓰는 메모리 때문에 생긴 half-cycle 경로**를 critical path로 찾아내고 timing을 닫은 뒤, 그 경로가 정하는 **주기 하한**까지 확인한 프로젝트입니다.
 
 | 항목 | 내용 |
 |---|---|
@@ -29,7 +29,39 @@
 
 <br>
 
-## 핵심 1 — Retiming이 레지스터를 삭제한 문제
+## 핵심 1 — Half-cycle 경로 Timing Closure
+
+### 구조 분석
+- Memory 레지스터는 반전 clock(clk′)에서 latch → controller(clk)에서 memory(clk′)로 가는 경로는 주기 1.4 ns가 아니라 **절반인 0.7 ns** 안에 도착해야 함
+- 이 경로가 32nm 전체의 **critical path**
+
+| 항목 | 값 |
+|---|---|
+| Startpoint → Endpoint | `top_mc1/state1/state_out_reg[2]` → `mem1/xn1_reg[6]` |
+| Capture edge | clk′ rise **0.700 ns** (half cycle) |
+| Data arrival / required | 0.857771 / 0.857918 ns |
+| Slack | **+0.000147 ns (MET)** |
+
+### 주기 하한 탐색
+spec(1.4 ns)을 만족한 뒤, 주기를 줄이며 어디까지 닫히는지 확인했습니다. 주기가 줄면 half-cycle 예산도 함께 줄어듭니다 (1.29 ns 주기에서는 0.645 ns).
+
+| 주기 | Reg-to-reg | Output WNS | 목표(−0.05 ns) 대비 |
+|---|---|---|---|
+| 1.29 ns | MET | −0.048 ns | **PASS** |
+| 1.28 ns | MET | −0.051 ns | FAIL |
+
+- **하한 1.29 ns**: 1.28 ns부터 허용치를 넘음
+- **대가**: LVT 24.8 % → 26.9 % (속도를 얻는 대신 leakage 증가, 28 % 허용 범위 이내)
+
+| Half-cycle 경로 | 1.29 ns vs 1.28 ns |
+|---|---|
+| ![half cycle](images/half_cycle.png) | ![period floor](images/period_floor.png) |
+
+<br>
+
+## 핵심 2 — Retiming이 레지스터를 삭제한 문제
+
+timing을 개선하려고 global retiming을 켜자 등가성 검사가 실패했습니다.
 
 ### 현상
 `set_optimize_registers true`로 global retiming을 켜자 `mem1/temp_reg`가 redundant로 판단되어 삭제됨
@@ -53,19 +85,6 @@ compile_ultra -retime -incremental
 
 <br>
 
-## 핵심 2 — Half-cycle 경로가 정하는 주기 하한
-
-- Memory 레지스터가 반전 clock(clk′)에서 latch → clk → clk′ 경로는 주기의 **절반(0.7 ns)** 안에 도착해야 함
-- 이 경로가 32nm 전체의 critical path (1.4 ns에서 slack +0.000147 ns)
-- 1.29 ns는 output WNS −0.048 ns로 허용치(−0.05) 이내, 1.28 ns는 −0.051 ns로 초과 → **하한 1.29 ns**
-- 대가: LVT 24.8 % → 26.9 % (속도를 얻는 대신 leakage 증가)
-
-| Half-cycle 경로 | 1.29 ns vs 1.28 ns |
-|---|---|
-| ![half cycle](images/half_cycle.png) | ![period floor](images/period_floor.png) |
-
-<br>
-
 ## 공정별 비교
 
 ![cross process](images/cross_process.png)
@@ -76,5 +95,6 @@ compile_ultra -retime -incremental
 <br>
 
 ## 배운 점
-- Retiming과 equivalence check는 따로 생각할 수 없고, 보존 전략을 함께 설계해야 한다는 것을 배웠습니다.
-- Hierarchy를 유지하면 내부 신호를 VCS에서 관찰할 수 있어 gate-level 검증이 훨씬 쉬웠습니다.
+- 회로 구조(반전 clock 메모리)가 timing 예산을 절반으로 줄이고, 결국 설계 전체의 주기 하한을 정한다는 것을 리포트로 확인했습니다.
+- 주기를 줄이는 것에는 LVT 비율 · area · power라는 비용이 따르며, 그 trade-off를 수치로 판단해야 한다는 것을 배웠습니다.
+- Retiming과 equivalence check는 따로 생각할 수 없고, 보존 전략을 함께 설계해야 합니다.
