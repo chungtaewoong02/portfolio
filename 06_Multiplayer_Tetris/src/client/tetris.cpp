@@ -239,10 +239,10 @@ void turn_blk(int comd) { // 블록 회전
         rot[j][k] = ps.cpd_tp[j][k];
     }
 
-    if (comd == 'a') { // 우회전
+    if (comd == 'a') { // 좌회전 (반시계)
         for (int j = 0; j < 4; ++j) for (int k = 0; k < 4; ++k) rot[j][k] = tmp[k][3 - j];
     }
-    else if (comd == 'd') { // 좌회전
+    else if (comd == 'd') { // 우회전 (시계)
         for (int j = 0; j < 4; ++j) for (int k = 0; k < 4; ++k) rot[j][k] = tmp[3 - k][j];
     }
     else if (comd == 32) { // 스페이스바(바닥으로 강하)

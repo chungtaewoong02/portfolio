@@ -3,7 +3,7 @@
 > RTL 합성부터 P&R, Sign-off check까지 직접 수행하며 **문제의 원인을 리포트로 확인하고 수치로 검증하는** 신입 PD 엔지니어입니다.
 
 - 청주대학교 전자공학과 (2027.02 졸업 예정, 4.1 / 4.5)
-- 청주대학교 산학협력단 ASIC flow 교육 (2026.04 ~ 2026.11 수료 예정)
+- 청주대학교 산학협력단 KDT AI 시스템 반도체 설계 과정 (2026.04 ~ 2026.11 수료 예정)
 - 청주대학교 SNSLAB 학부연구생 (2024.11 ~ 현재)
 - Email: wjdxodnd02@naver.com
 
@@ -38,7 +38,7 @@
 
 **1. 합성부터 Sign-off check까지 한 설계로 완주** ([Project 1](01_TOP_Synthesis_PnR/))
 
-| 단계 | Setup WNS (slow) | Hold WNS (fast) | Utilization |
+| 단계 | Setup WNS (ns, slow corner) | Hold WNS (ns, fast corner) | Utilization |
 |---|---|---|---|
 | Place | +0.01828 | −0.00037 (1 path) | 0.3077 |
 | CTS | +0.00972 | +0.01039 | 0.3285 |

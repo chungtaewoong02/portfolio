@@ -7,7 +7,7 @@ C++ TCP 소켓으로 최대 4명이 동시에 접속해 서로의 게임 화면�
 | 항목 | 내용 |
 |---|---|
 | 기간 | 학부연구생 활동 (SNSLAB) |
-| 언어 | C++17 (Windows 콘솔, Winsock2) |
+| 언어 | C++ (Visual Studio, Windows 콘솔, Winsock2) |
 | 구성 | 서버 1 + 클라이언트 최대 4 |
 | 핵심 기술 | TCP 소켓, 자체 패킷 프로토콜, 멀티스레드, `mutex` · `atomic` · `condition_variable` |
 | 소스 코드 | [`src/client`](src/client/) (약 1,150줄) · [`src/server`](src/server/) (약 380줄) |
@@ -18,6 +18,8 @@ C++ TCP 소켓으로 최대 4명이 동시에 접속해 서로의 게임 화면�
 <br>
 
 ## 구조
+
+![Architecture](images/architecture.png)
 
 ```
 src/
@@ -47,14 +49,14 @@ src/
 - 서버 접속 후 id를 받고, 화면을 4분할해 내 위치에 맵을 그림
 - 송신 스레드: 채팅 큐를 우선 처리하고, 150 ms마다 내 `playerstate` 전송
 - 수신 스레드: header type에 따라 채팅 로그 · 다른 플레이어 상태 큐 · 접속 종료 처리
-- 게임: 고스트 블록(낙하 위치 미리보기), 하드 드롭, 10초마다 바닥이 한 줄씩 올라오고 점점 빨라지는 난이도
+- 게임: 고스트 블록(낙하 위치 미리보기), 하드 드롭, 바닥이 한 줄씩 올라오는 간격(10초 → 최소 1초)과 블록 낙하 속도가 점점 빨라지는 난이도
 
 **서버**
 - 접속할 때마다 빈 id(1~4)를 부여하고 클라이언트별 스레드 생성
 - 받은 상태 · 채팅을 보낸 사람을 제외한 모든 클라이언트에게 중계, timeout 시 3회 재시도
 - 연결이 끊기면 id를 반납하고 나머지 클라이언트에게 type 2로 알림
 
-![Client Flow](images/client_flow.png)
+> 함수별 상세 플로우차트는 [발표 자료 PDF](docs/Multiplayer_Tetris.pdf)에 있습니다.
 
 <br>
 
@@ -76,4 +78,4 @@ src/
 2. `src/client/tetris.cpp`의 `sv_con()`에서 서버 IP를 서버 PC 주소로 변경 (같은 PC면 `127.0.0.1`)
 3. `src/client`의 3개 파일로 콘솔 프로젝트를 만들어 실행 (최대 4개)
 
-조작: ← → ↓ 이동 · `a` / `d` 회전 · Space 하드 드롭 · Enter 채팅
+조작: ← → ↓ 이동 · `a` 좌회전 · `d` 우회전 · Space 하드 드롭 · Enter 채팅
