@@ -26,11 +26,11 @@
 | # | 프로젝트 | 핵심 내용 | Tool | 키워드 |
 |---|---|---|---|---|
 | 1 | [**TOP: Synthesis → P&R**](01_TOP_Synthesis_PnR/) | 같은 설계를 합성부터 Route, Filler, Sign-off check까지 완주. DRC 0 · LVS short/open 0 · PG floating 0 | DC, ICC2, Formality | **RTL-to-Layout 완주** |
-| 2 | [**RISC16 + SRAM 합성 & TCL 자동화**](02_RISC16_Synthesis_TCL/) | fanout · transition 위반 자동 수정 TCL proc 작성, 3개 공정에서 수렴 주기 하한 탐색 | DC, Formality, VCS | **반복 작업 자동화** |
-| 3 | [**CISC 합성: Retiming과 Formality**](03_CISC_Synthesis_Formality/) | retiming으로 레지스터가 삭제되어 Formality FAIL → `only_map` + `dont_touch`로 해결 | DC, Formality, VCS | **Tool 동작 원리 분석** |
-| 4 | [YOLOv5 객체 추종 운반 로봇 (졸업작품)](04_YOLOv5_Robot/) | Jetson Nano + ATmega128 상하위 제어, YOLOv5 + DeepSORT 추종, 초음파 장애물 회피 | Python, C, Android | HW · SW 시스템 통합 |
-| 5 | [임베디드 로봇 프로젝트](05_Embedded_Robot/) | ATmega128 기반 라인트레이서 → 장애물 회피 → 블루투스 RC카, 오실로스코프 디버깅 | C, Android | 단계별 디버깅 |
-| 6 | [멀티플레이 테트리스](06_Multiplayer_Tetris/) | 최대 4인 접속, 자체 패킷 프로토콜, 송수신 스레드 분리 (소스 코드 포함) | C++ | 네트워크 · 멀티스레드 |
+| 2 | [**RISC16 + SRAM 합성 & TCL 자동화**](02_RISC16_Synthesis_TCL/) | fanout · transition 위반 자동 수정 TCL proc 작성, 3개 공정에서 수렴 주기 하한 탐색 | DC, Formality, VCS | **반복 작업<br>자동화** |
+| 3 | [**CISC 합성: Retiming과 Formality**](03_CISC_Synthesis_Formality/) | retiming으로 레지스터가 삭제되어 Formality FAIL → `only_map` + `dont_touch`로 해결 | DC, Formality, VCS | **Tool 동작<br>원리 분석** |
+| 4 | [YOLOv5 객체 추종 운반 로봇 (졸업작품)](04_YOLOv5_Robot/) | Jetson Nano + ATmega128 상하위 제어, YOLOv5 + DeepSORT 추종, 초음파 장애물 회피 | Python, C, Android | HW · SW<br>시스템 통합 |
+| 5 | [임베디드 로봇 프로젝트](05_Embedded_Robot/) | ATmega128 기반 라인트레이서 → 장애물 회피 → 블루투스 RC카, 오실로스코프 디버깅 | C, Android | 단계별<br>디버깅 |
+| 6 | [멀티플레이 테트리스](06_Multiplayer_Tetris/) | 최대 4인 접속, 자체 패킷 프로토콜, 송수신 스레드 분리 (소스 코드 포함) | C++ | 네트워크 ·<br>멀티스레드 |
 
 <br>
 
