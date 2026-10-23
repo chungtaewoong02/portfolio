@@ -1,8 +1,8 @@
-# TOP: Synthesis → Place & Route
+# Error Detection Code Block: Synthesis → Place & Route
 
 [← 메인으로](../)
 
-같은 RTL(TOP)을 **Design Compiler로 합성**한 뒤, 그 netlist를 **IC Compiler II로 Floorplan부터 Sign-off check까지** 진행한 프로젝트입니다.
+Error Detection Code Block(top module: `TOP`)을 **Design Compiler로 합성**한 뒤, 그 netlist를 **IC Compiler II로 Floorplan부터 Sign-off check까지** 진행한 프로젝트입니다.
 
 | 항목 | 내용 |
 |---|---|

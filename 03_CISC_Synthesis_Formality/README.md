@@ -51,7 +51,7 @@ spec(1.4 ns)을 만족한 뒤, 주기를 줄이며 어디까지 닫히는지 확
 | 1.28 ns | MET | −0.051 ns | FAIL |
 
 - **하한 1.29 ns**: 1.28 ns부터 허용치를 넘음
-- **대가**: LVT 24.8 % → 26.9 % (속도를 얻는 대신 leakage 증가, 28 % 허용 범위 이내)
+- **PPA trade-off**: Performance를 얻는 대신 LVT 24.8 % → 26.9 % (leakage 증가, 28 % 허용 범위 이내), area 2,231 → 2,355 µm², power 1.12 → 1.38 mW
 
 | Half-cycle 경로 | 1.29 ns vs 1.28 ns |
 |---|---|

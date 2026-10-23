@@ -76,7 +76,7 @@ spec(2.0 ns)을 만족한 뒤, 같은 RTL · flow에서 `create_clock -period`�
 
 <br>
 
-## 공정별 비교
+## 공정별 PPA 비교
 
 ![3-way](images/three_way.png)
 

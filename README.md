@@ -13,10 +13,10 @@
 
 | 분야 | 내용 |
 |---|---|
-| Front-End | Design Compiler, PrimeTime, Formality |
-| Back-End | IC Compiler II (Floorplan, PNS, Place, CTS, Route, Filler, Sign-off check), StarRC, IC Validator |
+| Front-End | Design Compiler, Formality |
+| Back-End | IC Compiler II (Floorplan, PNS, Place, CTS, Route, Filler, Sign-off check), StarRC, PrimeTime, IC Validator |
 | Simulation | VCS, Verdi, PSpice |
-| Script / Language | **TCL (tool별 run tcl 및 timing eco tcl 작성)**, Verilog, Python, C, C++ |
+| Script / Language | **TCL (Tool별 run script, timing ECO script, DRC 위반 자동 수정 proc 작성)**, Verilog, Python, C, C++ |
 | 기타 | Linux, FPGA, MCU (ATmega128), RTOS |
 
 <br>
@@ -25,9 +25,9 @@
 
 | # | 프로젝트 | 핵심 내용 | Tool | 키워드 |
 |---|---|---|---|---|
-| 1 | [**Error Detection Code Block Design: Synthesis → P&R**](01_Synthesis_PnR/) | 같은 설계를 합성부터 Route, Filler, Sign-off check까지 완주. DRC 0 · LVS short/open 0 · PG floating 0 | DC, ICC2, Formality | **RTL-to-Layout<br>완주** |
-| 2 | [**CISC 합성: Half-cycle 경로 Timing Closure**](03_CISC_Synthesis_Formality/) | 반전 clock 메모리로 생긴 half-cycle(0.7 ns) critical path 분석, spec 충족 후 spec up을 통한 PPA 중 Performance 향상 확인. Retiming으로 인한 LEC FAIL 분석 및 해결 | DC, Formality, VCS | **Half-cycle 경로<br>Timing Closure**
-| 3 | [**RISC16 + SRAM 합성 & TCL 자동화**](02_RISC16_Synthesis_TCL/) | fanout · transition 위반 자동 수정 TCL proc 작성, 3개 공정 별 최종 결과 비교를 통한 PPA 비교 분석 | DC, Formality, VCS | **반복 작업<br>자동화/<br>PPA 분석** |
+| 1 | [**Error Detection Code Block Design: Synthesis → P&R**](01_TOP_Synthesis_PnR/) | 같은 설계를 합성부터 Route, Filler, Sign-off check까지 완주. DRC 0 · LVS short/open 0 · PG floating 0 | DC, ICC2, Formality | **RTL-to-Layout<br>완주** |
+| 2 | [**CISC 합성: Half-cycle 경로 Timing Closure**](03_CISC_Synthesis_Formality/) | 반전 clock 메모리로 생긴 half-cycle(0.7 ns) critical path 분석, spec 충족 후 spec up을 통한 PPA 중 Performance 향상 확인. Retiming으로 인한 LEC FAIL 분석 및 해결 | DC, Formality, VCS | **Half-cycle 경로<br>Timing Closure** |
+| 3 | [**RISC16 + SRAM 합성 & TCL 자동화**](02_RISC16_Synthesis_TCL/) | fanout · transition 위반 자동 수정 TCL proc 작성, 3개 공정별 최종 결과 비교를 통한 PPA 비교 분석 | DC, Formality, VCS | **반복 작업<br>자동화/<br>PPA 분석** |
 | 4 | [YOLOv5 객체 추종 운반 로봇 (졸업작품)](04_YOLOv5_Robot/) | Jetson Nano(상위) + ATmega128(하위) 제어 구조, YOLOv5 + DeepSORT 추종, 초음파 장애물 회피 | Python, C, Android | HW · SW<br>시스템<br>통합 |
 | 5 | [임베디드 로봇 프로젝트](05_Embedded_Robot/) | ATmega128 기반 라인트레이서 → 장애물 회피 → 블루투스 RC카, 오실로스코프 디버깅 | C, Android | 단계별<br>디버깅 |
 | 6 | [멀티플레이 테트리스](06_Multiplayer_Tetris/) | 최대 4인 접속, 자체 패킷 프로토콜, 송수신 스레드 분리 (소스 코드 포함) | C++ | 네트워크 ·<br>멀티스레드 |
@@ -36,7 +36,7 @@
 
 ## Highlights
 
-**1. 합성부터 Sign-off check까지 한 설계로 완주** ([Project 1](01_TOP_Synthesis_PnR/))
+**1. Error Detection Code Block: 합성부터 Sign-off check까지 한 설계로 완주** ([Project 1](01_TOP_Synthesis_PnR/))
 
 | 단계 | Setup WNS (ns, slow corner) | Hold WNS (ns, fast corner) | Utilization |
 |---|---|---|---|
@@ -46,22 +46,23 @@
 
 DRC 0 · LVS short/open/floating 0 · PG floating 0 · Logic LVT 1.46 % (spec < 20 %)
 
-**2. 반복 작업을 TCL로 자동화** ([Project 2](02_RISC16_Synthesis_TCL/))
+**2. Half-cycle 경로 분석과 Tool 동작 원리 추적** ([Project 2](03_CISC_Synthesis_Formality/))
 
-주기 단축과 공정 이식 시 수십 개씩 생기는 max_fanout · max_transition 위반을 `split_fanout`, `report_transition_drivers` proc로 자동 수정. 공정에 종속되지 않도록 max_fanout 값과 buffer cell을 인자로 받게 설계.
+반전 clock 메모리로 생긴 half-cycle(0.7 ns) 경로가 critical path임을 찾아 714 MHz spec을 만족하고, spec-up으로 주기 하한 1.29 ns를 확인 (LVT 24.8 % → 26.9 %의 PPA trade-off).
+Retiming으로 레지스터가 삭제되어 LEC FAIL이 나자, `set_dont_retime`은 레지스터의 *이동*만 막고 *삭제*는 막지 못한다는 점을 확인하고 mapping 후 `dont_touch`를 거는 순서로 바꿔 Formality 20 failing → 0 failing.
 
-**3. Tool 동작 원리까지 추적한 문제 해결** ([Project 3](03_CISC_Synthesis_Formality/))
+**3. 반복 작업을 TCL로 자동화** ([Project 3](02_RISC16_Synthesis_TCL/))
 
-`set_dont_retime`은 레지스터의 *이동*만 막고 *삭제*는 막지 못한다는 점을 확인하고, mapping 후 `dont_touch`를 거는 순서로 바꿔 Formality 20 failing → 0 failing.
+주기 단축과 공정 이식 시 수십 개씩 생기는 max_fanout · max_transition 위반을 `split_fanout`, `report_transition_drivers` proc로 자동 수정. 공정에 종속되지 않도록 max_fanout 값과 buffer cell을 인자로 받게 설계해 3개 공정의 PPA 비교에 그대로 사용.
 
 <br>
 
 ## Repository 구조
 
 ```
-├── 01_TOP_Synthesis_PnR/          # 메인 PD 프로젝트
-├── 02_RISC16_Synthesis_TCL/
-├── 03_CISC_Synthesis_Formality/
+├── 01_TOP_Synthesis_PnR/          # Project 1: Error Detection Code Block
+├── 02_RISC16_Synthesis_TCL/       # Project 3: RISC16
+├── 03_CISC_Synthesis_Formality/   # Project 2: CISC
 ├── 04_YOLOv5_Robot/
 ├── 05_Embedded_Robot/
 └── 06_Multiplayer_Tetris/
