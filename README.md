@@ -26,7 +26,7 @@
 | # | 프로젝트 | 핵심 내용 | Tool | 키워드 |
 |---|---|---|---|---|
 | 1 | [**Error Detection Code Block Design: Synthesis → P&R**](01_Synthesis_PnR/) | 같은 설계를 합성부터 Route, Filler, Sign-off check까지 완주. DRC 0 · LVS short/open 0 · PG floating 0 | DC, ICC2, Formality | **RTL-to-Layout<br>완주** |
-| 2 | [**CISC 합성: Half-cycle 경로 Timing Closure**](03_CISC_Synthesis_Formality/) | 반전 clock 메모리로 생긴 half-cycle(0.7 ns) critical path 분석, 1.4 ns spec 기존 spec 충족 후 spec up을 통한 PPA 중 Performance 향상 확인. Retiming으로 인한 Formality FAIL도 해결 | DC, Formality, VCS | **Half-cycle 경로**
+| 2 | [**CISC 합성: Half-cycle 경로 Timing Closure**](03_CISC_Synthesis_Formality/) | 반전 clock 메모리로 생긴 half-cycle(0.7 ns) critical path 분석, spec 충족 후 spec up을 통한 PPA 중 Performance 향상 확인. Retiming으로 인한 Formality FAIL도 해결 | DC, Formality, VCS | **Half-cycle 경로**
 | 3 | [**RISC16 + SRAM 합성 & TCL 자동화**](02_RISC16_Synthesis_TCL/) | fanout · transition 위반 자동 수정 TCL proc 작성, 3개 공정에서 수렴 주기 하한 탐색 | DC, Formality, VCS | **반복 작업<br>자동화<br>Timing Closure** |
 | 4 | [YOLOv5 객체 추종 운반 로봇 (졸업작품)](04_YOLOv5_Robot/) | Jetson Nano(상위) + ATmega128(하위) 제어 구조, YOLOv5 + DeepSORT 추종, 초음파 장애물 회피 | Python, C, Android | HW · SW<br>시스템<br>통합 |
 | 5 | [임베디드 로봇 프로젝트](05_Embedded_Robot/) | ATmega128 기반 라인트레이서 → 장애물 회피 → 블루투스 RC카, 오실로스코프 디버깅 | C, Android | 단계별<br>디버깅 |
