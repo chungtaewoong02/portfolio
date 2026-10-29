@@ -26,7 +26,7 @@
 | # | 프로젝트 | 핵심 내용 | Tool | 키워드 |
 |---|---|---|---|---|
 | 1 | [**Error Detection Code Block Design: Synthesis → P&R**](01_TOP_Synthesis_PnR/) | 같은 설계를 합성부터 Route, Filler, Sign-off check까지 완주. DRC 0 · LVS short/open 0 · PG floating 0 | DC, ICC2, Formality | **RTL-to-Layout<br>완주** |
-| 2 | [**CISC 합성: Half-cycle 경로 Timing Closure**](03_CISC_Synthesis_Formality/) | 반전 clock 메모리로 생긴 half-cycle(0.7 ns) critical path 분석, spec 충족 후 spec up을 통한 PPA 중 Performance 향상 확인. Retiming으로 인한 LEC FAIL 분석 및 해결 | DC, Formality, VCS | **Half-cycle 경로<br>Timing Closure** |
+| 2 | [**CISC: Synthesis → Sign-off**](03_CISC_Synthesis_Formality/) | 반전 clock 메모리로 생긴 half-cycle(0.7 ns) critical path를 합성에서 분석, CCD useful skew와 PT 자동 ECO 실패 후 수동 ECO(clone · Vt swap)로 sign-off. 4 scenario timing · DRC · LVS 위반 0 | DC, Formality, ICC2, StarRC, PrimeTime | **Half-cycle 경로<br>Timing Closure** |
 | 3 | [**RISC16 + SRAM 합성 & TCL 자동화**](02_RISC16_Synthesis_TCL/) | fanout · transition 위반 자동 수정 TCL proc 작성, 3개 공정별 최종 결과 비교를 통한 PPA 비교 분석 | DC, Formality, VCS | **반복 작업<br>자동화/<br>PPA 분석** |
 | 4 | [YOLOv5 객체 추종 운반 로봇 (졸업작품)](04_YOLOv5_Robot/) | Jetson Nano(상위) + ATmega128(하위) 제어 구조, YOLOv5 + DeepSORT 추종, 초음파 장애물 회피 | Python, C, Android | HW · SW<br>시스템<br>통합 |
 | 5 | [임베디드 로봇 프로젝트](05_Embedded_Robot/) | ATmega128 기반 라인트레이서 → 장애물 회피 → 블루투스 RC카, 오실로스코프 디버깅 | C, Android | 단계별<br>디버깅 |
@@ -46,10 +46,19 @@
 
 DRC 0 · LVS short/open/floating 0 · PG floating 0 · Logic LVT 1.46 % (spec < 20 %)
 
-**2. Half-cycle 경로 분석과 Tool 동작 원리 추적** ([Project 2](03_CISC_Synthesis_Formality/))
+**2. Half-cycle 경로를 합성부터 Sign-off까지 추적** ([Project 2](03_CISC_Synthesis_Formality/))
 
-반전 clock 메모리로 생긴 half-cycle(0.7 ns) 경로가 critical path임을 찾아 714 MHz spec을 만족하고, spec-up으로 주기 하한 1.29 ns를 확인 (LVT 24.8 % → 26.9 %의 PPA trade-off).
-Retiming으로 레지스터가 삭제되어 LEC FAIL이 나자, `set_dont_retime`은 레지스터의 *이동*만 막고 *삭제*는 막지 못한다는 점을 확인하고 mapping 후 `dont_touch`를 거는 순서로 바꿔 Formality 20 failing → 0 failing.
+반전 clock 메모리로 생긴 half-cycle(0.7 ns) 경로를 합성에서 critical path로 찾아 714 MHz spec을 만족하고, back-end에서는 classic CTS 대신 CCD(useful skew)를 선택.
+Route 후 남은 setup 위반을 PrimeTime `fix_eco_timing`이 0개 수정하자, load별 slack scan으로 위반 load만 골라 MUX · OR clone과 Vt swap을 적용해 직접 해결.
+
+| 단계 | Setup WNS (ns, tt0p78v125c) |
+|---|---|
+| Route | −0.00706 (1 path) |
+| PT 자동 ECO | 0 fixed |
+| 수동 ECO (sizing → MUX clone → OR clone → Vt swap) | +0.00032 |
+| Final (Filler 후) | **+0.00027** · hold +0.03854 · DRC / LVS 0 |
+
+합성 단계에서는 retiming으로 레지스터가 삭제된 LEC FAIL을 `only_map` → `dont_touch` 순서로 해결 (Formality 20 failing → 0).
 
 **3. 반복 작업을 TCL로 자동화** ([Project 3](02_RISC16_Synthesis_TCL/))
 
@@ -62,7 +71,7 @@ Retiming으로 레지스터가 삭제되어 LEC FAIL이 나자, `set_dont_retime
 ```
 ├── 01_TOP_Synthesis_PnR/          # Project 1: Error Detection Code Block
 ├── 02_RISC16_Synthesis_TCL/       # Project 3: RISC16
-├── 03_CISC_Synthesis_Formality/   # Project 2: CISC
+├── 03_CISC_Synthesis_Formality/   # Project 2: CISC (Synthesis → Sign-off)
 ├── 04_YOLOv5_Robot/
 ├── 05_Embedded_Robot/
 └── 06_Multiplayer_Tetris/
