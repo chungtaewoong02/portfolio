@@ -110,7 +110,7 @@ compile_ultra -retime -incremental
 ### Gate-level 시뮬레이션
 - 1.4 ns와 1.29 ns netlist 모두 최종 결과값 144와 zero flag에 의한 program 종료가 RTL과 동일
 - 합성 후 nstate의 reset 판정 bit가 high-Z로 표시되는 원인을 추적해, 해당 bit가 reset_bar(active-high reset)로 분리된 것임을 확인
-- Hierarchy를 유지한 netlist라 내부 신호까지 관찰 가능해, flat netlist보다 동작 확인이 쉬움
+- Hierarchy를 유지한 netlist라 내부 신호까지 관찰 가능해, flat netlist보다 동작 확인 용이
 
 ![netlist](images/sim_netlist.png)
 
@@ -144,7 +144,7 @@ Setup & Scenario → Floorplan + PNS → Place → CTS → Route
 - 대가로 clock latency 0.04 – 0.11 ns로 insertion delay spec(150 ± 5 ps)은 미충족 — **trade-off**
 - 참고: half-cycle 경로가 없는 [Error Detection Code Block](../01_ErrorDetection_Synthesis_PnR/)에서는 balanced tree를 목표로 CCD를 끄고 진행 → **설계 구조에 따라 CTS 전략을 다르게 선택**
 
-### Issue ① — PT 자동 ECO로 해결되지 않은 half-cycle setup 위반
+### 문제 1 — PT 자동 ECO로 해결되지 않은 half-cycle setup 위반
 
 Route 후 tt0p78v125c에서 half-cycle 경로(`HC_P2N`) setup −0.00706 ns 1 path가 남았고, StarRC SPEF 기반 PrimeTime DMSA의 `fix_eco_timing`은 **위반 endpoint 2개를 찾고도 0개 수정**했습니다. 그래서 위반 경로를 직접 분석해 단계적으로 수동 ECO를 적용했습니다.
 
@@ -166,7 +166,7 @@ Route 후 tt0p78v125c에서 half-cycle 경로(`HC_P2N`) setup −0.00706 ns 1 pa
 |---|---|
 | ![after](images/be_eco_path_after.png) | ![qor](images/be_qor_after_eco.png) |
 
-### Issue ② — ECO 적용 후 route DRC 10
+### 문제 2 — ECO 적용 후 route DRC 10
 
 - 최종 PT에서 위반이 없는 상태로 `fix_eco_timing` 결과 tcl을 ICC2에 적용하자 **M1 route DRC 10개**(Short 6, Less than minimum enclosed area 4) 발생
 - ECO로 바뀐 cell 주변 M1 배선 문제 → error net과 via를 수동 삭제 후 `route_eco -open_net_driven true`로 재배선 → **DRC 10 → 0**
