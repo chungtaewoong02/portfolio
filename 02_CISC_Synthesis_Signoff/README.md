@@ -13,6 +13,7 @@
 | 라이브러리 | SAED32 32nm (합성은 180nm · 130nm 비교 포함) |
 | 범위 | Front-end → Back-end (P&R · StarRC · PrimeTime Sign-off) |
 | Tool | Design Compiler, Formality, VCS, IC Compiler II, StarRC, PrimeTime (DMSA) |
+| 주요 작업 | 합성 제약 작성, Formality 문제 해결, ICC2 전체 flow TCL 작성, StarRC · PrimeTime DMSA 분석, 수동 ECO script 작성 |
 | 상세 자료 | [합성 (DC) PDF](docs/CISC_Synthesis.pdf) · [Back-end (ICC2 · StarRC · PT) PDF](docs/CISC_PnR_ICC2.pdf) |
 
 ![Architecture](images/architecture.png)

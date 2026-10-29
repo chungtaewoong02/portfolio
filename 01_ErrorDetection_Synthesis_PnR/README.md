@@ -1,4 +1,4 @@
-# Error Detection Code Block: Synthesis → Place & Route
+# Error Detection Code Block: Synthesis → P&R
 
 [← 메인으로](../)
 
@@ -11,7 +11,7 @@ Error Detection Code Block(top module: `TOP`)을 **Design Compiler로 합성**�
 | 라이브러리 | SAED32 32nm (HVT / RVT / LVT), 비교용 180nm |
 | 범위 | Front-end → Back-end (P&R) |
 | Tool | Design Compiler, Formality, VCS, IC Compiler II |
-| 역할 | 합성 제약 작성, 위반 분석 및 수정, ICC2 전체 flow TCL 작성 및 실행 |
+| 주요 작업 | 합성 제약 작성, 위반 분석 및 수정, ICC2 전체 flow TCL 작성 및 실행 |
 | 상세 자료 | [P&R (ICC2) PDF](docs/ErrorDetection_PnR_ICC2.pdf) · [합성 (DC) PDF](docs/ErrorDetection_Synthesis_DC.pdf) |
 
 <br>

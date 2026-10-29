@@ -11,7 +11,7 @@
 | 라이브러리 | SAED32 32nm, 180nm, 130nm |
 | 범위 | Front-end (Synthesis · Formality · Gate-level simulation) |
 | Tool | Design Compiler (Topographical / WLM), Formality, VCS |
-| 역할 | Testbench 작성, 합성 제약 및 위반 수정, **자동화 TCL 작성**, 공정별 PPA 비교 |
+| 주요 작업 | Testbench 작성, 합성 제약 및 위반 수정, **자동화 TCL 작성**, 공정별 PPA 비교 |
 | 상세 자료 | [발표 자료 PDF](docs/RISC16_Synthesis.pdf) |
 
 ![Architecture](images/architecture.png)
