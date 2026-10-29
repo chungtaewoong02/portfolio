@@ -1,6 +1,6 @@
 # 정태웅 | ASIC Design Portfolio
 
-> RTL 합성부터 P&R, Sign-off check까지 직접 수행하며 **문제의 원인을 리포트로 확인하고 수치로 검증하는** 신입 ASIC 엔지니어입니다.
+> RTL 합성부터 P&R, Sign-off까지 직접 수행하며 **문제의 원인을 리포트로 확인하고 수치로 검증하는** 신입 ASIC 엔지니어입니다.
 
 - 청주대학교 전자공학과 (2027.02 졸업 예정, 4.1 / 4.5)
 - 청주대학교 산학협력단 KDT AI 시스템 반도체 설계 과정 (2026.04 ~ 2026.11 수료 예정)
@@ -16,7 +16,7 @@
 | Front-End | Design Compiler, Formality |
 | Back-End | IC Compiler II (Floorplan, PNS, Place, CTS, Route, Filler, Sign-off check), StarRC, PrimeTime, IC Validator |
 | Simulation | VCS, Verdi, PSpice |
-| Script / Language | **TCL (Tool별 run script, timing ECO script, DRC 위반 자동 수정 proc 작성)**, Verilog, Python, C, C++ |
+| Script / Language | **TCL (Tool별 run script, 수동 ECO script, DRC 위반 자동 수정 proc 작성)**, Verilog, Python, C, C++ |
 | 기타 | Linux, FPGA, MCU (ATmega128), RTOS |
 
 <br>
