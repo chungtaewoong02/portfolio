@@ -55,7 +55,7 @@
 
 <br>
 
-## 핵심 2 — 주기 하한 탐색 (Spec-up 실험)
+## 핵심 2 — Spec-up을 통한 PPA trade-off 분석
 
 spec(2.0 ns)을 만족한 뒤, 같은 RTL · flow에서 `create_clock -period`만 줄여 **어디까지 닫히는지, 그 비용은 무엇인지** 확인했습니다.
 

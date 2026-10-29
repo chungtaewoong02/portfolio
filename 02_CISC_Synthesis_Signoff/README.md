@@ -92,6 +92,13 @@ compile_ultra -retime -incremental
 |---|---|
 | ![fail](images/formality_fail.png) | ![fix](images/formality_fix.png) |
 
+### 핵심 3 — 공정별 비교
+
+![cross process](images/cross_process.png)
+
+- 다른 공정으로 옮길 때 spec의 출력 부하가 SAED32 셀 기준으로 정의되어 있어, 대상 라이브러리의 pin capacitance와 단위(fF ↔ pF)를 확인해 값을 다시 설정
+- 180nm · 130nm는 1.4 ns에서 WNS −1.9 / −1.2 ns로 공정 속도 자체의 한계 확인
+
 <br>
 
 ## Part 2. Back-end (IC Compiler II · StarRC · PrimeTime)
@@ -178,15 +185,6 @@ Route 후 tt0p78v125c에서 half-cycle 경로(`HC_P2N`) setup −0.00706 ns 1 pa
 ### Challenge — ss corner까지 closure 시도
 
 ss 2 scenario까지 켜고 place → CTS → route를 진행했지만, ss0p7v125c(0.70 V, 125 °C)에서 route 후 setup WNS −0.85397 ns(90 path)로 ECO로 메울 수 없는 위반폭이 남아 **메인 결과는 ss off 기준**으로 진행했습니다.
-
-<br>
-
-## 공정별 비교 (Synthesis)
-
-![cross process](images/cross_process.png)
-
-- 다른 공정으로 옮길 때 spec의 출력 부하가 SAED32 셀 기준으로 정의되어 있어, 대상 라이브러리의 pin capacitance와 단위(fF ↔ pF)를 확인해 값을 다시 설정
-- 180nm · 130nm는 1.4 ns에서 WNS −1.9 / −1.2 ns로 공정 속도 자체의 한계 확인
 
 <br>
 
