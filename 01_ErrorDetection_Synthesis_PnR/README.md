@@ -9,6 +9,7 @@ Error Detection Code Block(top module: `TOP`)을 **Design Compiler로 합성**�
 | 기간 | 2026.04 ~ (진행 중, KDT AI 시스템 반도체 설계 과정) |
 | 설계 | 4-bit max / min / error(\|max − min\|) 3-stage pipeline |
 | 라이브러리 | SAED32 32nm (HVT / RVT / LVT), 비교용 180nm |
+| 범위 | Front-end → Back-end (P&R) |
 | Tool | Design Compiler, Formality, VCS, IC Compiler II |
 | 역할 | 합성 제약 작성, 위반 분석 및 수정, ICC2 전체 flow TCL 작성 및 실행 |
 | 상세 자료 | [P&R (ICC2) PDF](docs/ErrorDetection_PnR_ICC2.pdf) · [합성 (DC) PDF](docs/ErrorDetection_Synthesis_DC.pdf) |
@@ -32,7 +33,27 @@ Error Detection Code Block(top module: `TOP`)을 **Design Compiler로 합성**�
 
 <br>
 
-## Part 1. Front-end (Design Compiler)
+## Part 1. Front-end (Design Compiler · Formality · VCS)
+
+### 기능 검증 — RTL · Gate-level Simulation
+
+확인할 조건을 먼저 정리하고, 각 vector의 결과를 미리 예측한 뒤 시뮬레이션과 비교했습니다.
+
+| 구간 | imax1–4 | imin1–4 | max / min / error | 확인 내용 |
+|---|---|---|---|---|
+| reset | 0,0,0,0 | 0,0,0,0 | 0 / 0 / 0 | 비동기 reset 초기화 |
+| Case 1 | 8,7,6,5 | 1,2,3,4 | 8 / 1 / 7 | 극값이 1번 입력 · max > min |
+| reset (동작 중) | 8,7,6,5 | 1,2,3,4 | 0 / 0 / 0 | 동작 중 비동기 reset |
+| Case 2 | 3,4,2,1 | 6,5,7,8 | 4 / 5 / 1 | 극값이 2번 입력 · max < min |
+| Case 3 | 3,2,4,1 | 5,6,4,7 | 4 / 4 / 0 | 극값이 3번 입력 · max = min |
+| Case 4 | 7,6,5,8 | 2,3,4,1 | 8 / 1 / 7 | 극값이 4번 입력 · max > min |
+
+- **RTL 시뮬레이션**: 모든 vector에서 예측값과 시뮬레이션 결과 일치
+- **Gate-level 시뮬레이션**: 합성 netlist가 RTL과 같은 결과를 재현 (worst-case library 기준 setup +0.0002 ns), X로 보이는 구간은 cell delay에 의한 전이 구간으로 기능 불일치가 아님을 확인
+
+| RTL 시뮬레이션 | Gate-level 시뮬레이션 |
+|---|---|
+| ![rtl](images/sim_rtl.png) | ![netlist](images/sim_netlist.png) |
 
 ### 문제 1 — Max Capacitance 위반 66개
 - **원인 분석**: `size_cell`은 timing만 개선하고 capacitance는 미감소

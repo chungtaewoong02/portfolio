@@ -11,6 +11,7 @@
 | 설계 | 8-bit CISC (Controller, Memory, Bidirectional bus, Dual-phase clock) |
 | Spec | 714 MHz (1.4 ns), LVT < 25 % (recommendation 28 %), L-shape boundary |
 | 라이브러리 | SAED32 32nm (합성은 180nm · 130nm 비교 포함) |
+| 범위 | Front-end → Back-end (P&R · StarRC · PrimeTime Sign-off) |
 | Tool | Design Compiler, Formality, VCS, IC Compiler II, StarRC, PrimeTime (DMSA) |
 | 상세 자료 | [합성 (DC) PDF](docs/CISC_Synthesis.pdf) · [Back-end (ICC2 · StarRC · PT) PDF](docs/CISC_PnR_ICC2.pdf) |
 
@@ -48,7 +49,18 @@
 
 <br>
 
-## Part 1. Synthesis (Design Compiler)
+## Part 1. Front-end (Design Compiler · Formality · VCS)
+
+### 기능 검증 — RTL · Gate-level Simulation
+
+- **RTL 시뮬레이션**: reset → fetch → decode → execute를 memory 주소 범위 전체에서 확인, 이 결과를 이후 gate-level 시뮬레이션의 기준으로 사용
+- **Gate-level 시뮬레이션**: 1.4 ns와 1.29 ns netlist 모두 최종 결과값 144와 zero flag에 의한 program 종료가 RTL과 동일
+- 합성 후 nstate의 reset 판정 bit가 high-Z로 표시되는 원인을 추적해, 해당 bit가 reset_bar(active-high reset)로 분리된 것임을 확인
+- Hierarchy를 유지한 netlist라 내부 신호까지 관찰 가능해, flat netlist보다 동작 확인이 쉬움
+
+| RTL 시뮬레이션 | Gate-level 시뮬레이션 (1.4 ns) |
+|---|---|
+| ![rtl](images/sim_rtl.png) | ![netlist](images/sim_netlist.png) |
 
 ### 핵심 1 — Half-cycle 경로 Timing Closure
 
