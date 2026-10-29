@@ -31,6 +31,21 @@
 
 <br>
 
+## RTL 시뮬레이션
+
+ROM에 적재한 test program(LW · LW · ADD · SW · SUB · NOT · SLL · SRL · AND · OR · SLT · ADD · BEQ · BNE · J)이 끝까지 실행되는지 확인하는 testbench를 작성했습니다.
+
+- **Preload**: `force`로 data memory(SRAM)에 주소와 데이터를 주입하고 `$readmemb`로 초기값 적재
+- **실행**: reset 해제 후 `while(!done)`으로 명령 시퀀스 수행, done 이후 일정 시간 뒤 `$finish`로 자동 종료
+- **판정**: pc가 `0x14`에 도달하고 opcode 9(`instr 0x9050`), pc_next `0x16`이면 done · pass → 정해진 end point에서 판정해 이후 명령의 X · Z가 결과에 영향을 주지 않도록 설계
+- RTL 시뮬레이션에서 preload → LOAD → STORE → 명령 실행 → done · pass 순서로 동작 확인, 이 결과를 합성 후 검증의 기준으로 사용
+
+| Testbench | RTL 시뮬레이션 |
+|---|---|
+| ![testbench](images/sim_testbench.png) | ![rtl](images/sim_rtl.png) |
+
+<br>
+
 ## 핵심 1 — 위반 수정 자동화 (TCL)
 
 **왜 만들었나**: 2.0 ns까지는 수동으로 충분했지만, 주기를 줄이거나 공정을 바꾸면 max_fanout · max_transition 위반이 수십 개 단위로 생겨 `report_net` 확인 → `insert_buffer` / `size_cell`을 반복하는 방식으로는 느리고 누락 위험이 있었습니다.
@@ -83,6 +98,19 @@ spec(2.0 ns)을 만족한 뒤, 같은 RTL · flow에서 `create_clock -period`�
 
 - 32nm와 180nm는 Topographical(tech DB 기반 RC), 130nm는 tech DB가 없어 WLM(fanout 기반 추정)으로 합성 → 130nm 수치는 참고치로 해석
 - 180nm는 32nm용 max_transition(0.100 ns)이 셀 특성에 비해 과하게 엄격해 라이브러리의 `default_max_transition`을 사용
+
+<br>
+
+## Gate-level 시뮬레이션 & Formality
+
+- **Formality**: 2.0 ns netlist 119 compare points, 1.8 ns netlist 216 compare points 모두 PASS (180nm · 130nm 포함 전 공정 PASS)
+- **Gate-level 시뮬레이션 (2.0 ns)**: done · pass를 RTL과 동일하게 재현
+- **instruction 출력의 high-Z**: ROM이 사용하는 주소만 `case`로 정의되어 있어, 정의되지 않은 출력 bit에 driver가 없어 합성 후 Z로 표시되는 것을 확인 → 기능에 쓰이지 않는 bit라 판정에 영향 없음
+- **Gate-level 시뮬레이션 (1.8 ns)**: done · pass 재현. RTL의 `alu_op[1]`이 netlist에서 보이지 않아 추적한 결과, `IN0` 입력과 인버터를 거친 `ALUOp[1]_BAR`로 재구현된 것을 확인 → 기능 동일
+
+| Gate-level 시뮬레이션 (2.0 ns) | instruction high-Z 원인 |
+|---|---|
+| ![netlist](images/sim_netlist.png) | ![z](images/sim_netlist_z.png) |
 
 <br>
 

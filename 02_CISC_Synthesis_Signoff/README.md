@@ -51,16 +51,11 @@
 
 ## Part 1. Front-end (Design Compiler · Formality · VCS)
 
-### 기능 검증 — RTL · Gate-level Simulation
+### RTL 시뮬레이션
 
-- **RTL 시뮬레이션**: reset → fetch → decode → execute를 memory 주소 범위 전체에서 확인, 이 결과를 이후 gate-level 시뮬레이션의 기준으로 사용
-- **Gate-level 시뮬레이션**: 1.4 ns와 1.29 ns netlist 모두 최종 결과값 144와 zero flag에 의한 program 종료가 RTL과 동일
-- 합성 후 nstate의 reset 판정 bit가 high-Z로 표시되는 원인을 추적해, 해당 bit가 reset_bar(active-high reset)로 분리된 것임을 확인
-- Hierarchy를 유지한 netlist라 내부 신호까지 관찰 가능해, flat netlist보다 동작 확인이 쉬움
+reset → fetch → decode → execute 동작을 memory 주소 범위 전체에서 확인했고, 이 결과를 합성 후 gate-level 시뮬레이션의 기준으로 사용했습니다.
 
-| RTL 시뮬레이션 | Gate-level 시뮬레이션 (1.4 ns) |
-|---|---|
-| ![rtl](images/sim_rtl.png) | ![netlist](images/sim_netlist.png) |
+![rtl](images/sim_rtl.png)
 
 ### 핵심 1 — Half-cycle 경로 Timing Closure
 
@@ -110,6 +105,13 @@ compile_ultra -retime -incremental
 
 - 다른 공정으로 옮길 때 spec의 출력 부하가 SAED32 셀 기준으로 정의되어 있어, 대상 라이브러리의 pin capacitance와 단위(fF ↔ pF)를 확인해 값을 다시 설정
 - 180nm · 130nm는 1.4 ns에서 WNS −1.9 / −1.2 ns로 공정 속도 자체의 한계 확인
+
+### Gate-level 시뮬레이션
+- 1.4 ns와 1.29 ns netlist 모두 최종 결과값 144와 zero flag에 의한 program 종료가 RTL과 동일
+- 합성 후 nstate의 reset 판정 bit가 high-Z로 표시되는 원인을 추적해, 해당 bit가 reset_bar(active-high reset)로 분리된 것임을 확인
+- Hierarchy를 유지한 netlist라 내부 신호까지 관찰 가능해, flat netlist보다 동작 확인이 쉬움
+
+![netlist](images/sim_netlist.png)
 
 <br>
 
