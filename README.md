@@ -26,7 +26,7 @@
 | # | 프로젝트 | 핵심 내용 | Tool | 키워드 |
 |---|---|---|---|---|
 | 1 | [**Error Detection Code Block Design: Synthesis → P&R**](01_TOP_Synthesis_PnR/) | 같은 설계를 합성부터 Route, Filler, Sign-off check까지 완주. DRC 0 · LVS short/open 0 · PG floating 0 | DC, ICC2, Formality | **RTL-to-Layout<br>완주** |
-| 2 | [**CISC: Synthesis → Sign-off**](03_CISC_Synthesis_Formality/) | 반전 clock 메모리로 생긴 half-cycle(0.7 ns) critical path를 합성에서 분석, CCD useful skew와 PT 자동 ECO 실패 후 수동 ECO(clone · Vt swap)로 sign-off. 4 scenario timing · DRC · LVS 위반 0 | DC, Formality, ICC2, StarRC, PrimeTime | **Half-cycle 경로<br>Timing Closure** |
+| 2 | [**CISC: Synthesis → Sign-off**](03_CISC_Synthesis_Formality/) | 반전 clock(clk′)으로 생긴 half-cycle(0.7 ns) critical path를 합성에서 분석, CCD useful skew와 PT 자동 ECO 실패 후 수동 ECO(clone · Vt swap)로 sign-off. 4 scenario timing · DRC · LVS 위반 0 | DC, Formality, ICC2, StarRC, PrimeTime | **Half-cycle 경로<br>Timing Closure** |
 | 3 | [**RISC16 + SRAM 합성 & TCL 자동화**](02_RISC16_Synthesis_TCL/) | fanout · transition 위반 자동 수정 TCL proc 작성, 3개 공정별 최종 결과 비교를 통한 PPA 비교 분석 | DC, Formality, VCS | **반복 작업<br>자동화/<br>PPA 분석** |
 | 4 | [YOLOv5 객체 추종 운반 로봇 (졸업작품)](04_YOLOv5_Robot/) | Jetson Nano(상위) + ATmega128(하위) 제어 구조, YOLOv5 + DeepSORT 추종, 초음파 장애물 회피 | Python, C, Android | HW · SW<br>시스템<br>통합 |
 | 5 | [임베디드 로봇 프로젝트](05_Embedded_Robot/) | ATmega128 기반 라인트레이서 → 장애물 회피 → 블루투스 RC카, 오실로스코프 디버깅 | C, Android | 단계별<br>디버깅 |
@@ -48,7 +48,7 @@ DRC 0 · LVS short/open/floating 0 · PG floating 0 · Logic LVT 1.46 % (spec < 
 
 **2. Half-cycle 경로를 합성부터 Sign-off까지 추적** ([Project 2](03_CISC_Synthesis_Formality/))
 
-반전 clock 메모리로 생긴 half-cycle(0.7 ns) 경로를 합성에서 critical path로 찾아 714 MHz spec을 만족하고, back-end에서는 classic CTS 대신 CCD(useful skew)를 선택.
+반전 clock(clk′)으로 동작하는 메모리로 인해 생긴 half-cycle(0.7 ns) 경로를 합성에서 critical path로 찾아 714 MHz spec을 만족하고, back-end에서는 classic CTS 대신 CCD(useful skew)를 선택.
 Route 후 남은 setup 위반을 PrimeTime `fix_eco_timing`이 0개 수정하자, load별 slack scan으로 위반 load만 골라 MUX · OR clone과 Vt swap을 적용해 직접 해결.
 
 | 단계 | Setup WNS (ns, tt0p78v125c) |

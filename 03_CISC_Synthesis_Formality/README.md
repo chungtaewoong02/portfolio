@@ -3,7 +3,7 @@
 [← 메인으로](../)
 
 8-bit CISC 마이크로프로세서를 **합성부터 P&R, StarRC · PrimeTime ECO, Sign-off까지** 진행한 프로젝트입니다.
-반전 clock을 쓰는 메모리 때문에 생긴 **half-cycle 경로**를 합성 단계에서 critical path로 찾아냈고, back-end에서도 같은 경로가 끝까지 남아 PT 자동 ECO로 해결되지 않자 **수동 ECO로 직접 닫았습니다.**
+반전 clock(clk′)으로 동작하는 메모리로 인해 생긴 **half-cycle 경로**를 합성 단계에서 critical path로 찾아냈고, back-end에서도 같은 경로가 끝까지 남아 PT 자동 ECO로 해결되지 않자 **수동 ECO로 직접 닫았습니다.**
 
 | 항목 | 내용 |
 |---|---|
@@ -52,7 +52,7 @@
 
 ### 핵심 1 — Half-cycle 경로 Timing Closure
 
-- Memory 레지스터는 반전 clock(clk′)에서 latch → controller(clk)에서 memory(clk′)로 가는 경로는 주기 1.4 ns가 아니라 **절반인 0.7 ns** 안에 도착해야 함
+- Controller(`top_mc1`)는 clk, 메모리(`mem1`)는 반전 clock(clk′)으로 동작 → controller에서 메모리로 가는 경로는 주기 1.4 ns가 아니라 **절반인 0.7 ns** 안에 도착해야 함
 - 이 경로가 32nm 전체의 **critical path**
 
 | 항목 | 값 |
@@ -191,7 +191,7 @@ ss 2 scenario까지 켜고 place → CTS → route를 진행했지만, ss0p7v125
 <br>
 
 ## 배운 점
-- 회로 구조(반전 clock 메모리)가 정한 half-cycle 경로는 합성부터 sign-off까지 따라다니는 문제였고, 단계마다 다른 방법(path group, CCD, 수동 ECO)으로 대응해야 했습니다.
+- 반전 clock(clk′)으로 동작하는 메모리로 인해 생긴 half-cycle 경로는 합성부터 sign-off까지 따라다니는 문제였고, 단계마다 다른 방법(path group, CCD, 수동 ECO)으로 대응해야 했습니다.
 - Tool의 자동 ECO가 실패해도 경로를 load 단위로 쪼개서 보면 해결 방법을 찾을 수 있다는 것을 경험했습니다.
 - timing을 위해 LVT 비율과 clock latency를 내준 것처럼, sign-off는 모든 지표를 만족시키는 일이 아니라 우선순위를 정하고 그 근거를 설명하는 일이라는 것을 배웠습니다.
 - Retiming과 equivalence check는 따로 생각할 수 없고, 보존 전략을 함께 설계해야 합니다.
