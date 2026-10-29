@@ -32,7 +32,7 @@ Error Detection Code Block(top module: `TOP`)을 **Design Compiler로 합성**�
 
 <br>
 
-## Part 1. Synthesis (Design Compiler)
+## Part 1. Front-end (Design Compiler)
 
 ### 문제 1 — Max Capacitance 위반 66개
 - **원인 분석**: `size_cell`은 timing만 개선하고 capacitance는 미감소
@@ -55,7 +55,7 @@ Error Detection Code Block(top module: `TOP`)을 **Design Compiler로 합성**�
 
 <br>
 
-## Part 2. Place & Route (IC Compiler II)
+## Part 2. Back-end (IC Compiler II)
 
 ### Flow
 Setup(NDM, MCMM 1 mode × 2 corner) → Floorplan & PNS → Place → CTS → Route → Filler & Sign-off check
