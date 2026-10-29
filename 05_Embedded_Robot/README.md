@@ -7,7 +7,7 @@
 
 | 항목 | 내용 |
 |---|---|
-| 기간 | 2025.01 ~ 2025.07 |
+| 기간 | 2025.01 ~ 2025.05 |
 | MCU | ATmega128 (Timer/Counter, External Interrupt, USART, ADC) |
 | 센서 · 모듈 | 포토 센서, 초음파 센서(HC-SR04) × 3, 조도 센서, Bluetooth 모듈, BLE 모듈(BT05A) |
 | Tool | Atmel Studio (C), Android Studio (Kotlin), 오실로스코프, 멀티미터 |
